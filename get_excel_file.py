@@ -1,12 +1,12 @@
-import bs4
 import requests
+import bs4
 
 BASE_URL = 'https://www.dol.gov'
 
 
 # function to extract html document from given url
 def getHTMLdocument(url):
-    # request for HTML document of given url
+    # request for HTML document of given ur./venv/bin/python get_excel_file.pyl
     response = requests.get(url)
     # response will be provided in JSON format
     return response.text
@@ -25,10 +25,12 @@ tag_element = soup.find(title='PERM Disclosure Data FY2021')
 path = tag_element['href']
 
 file_url = BASE_URL + path
+print(file_url)
+
 # Download file to memory
 response = requests.get(file_url)
 
-# # Save the file to disk
-# file_name = file_url.split('/')[-1]
-# with open(file_name, 'wb') as output_file:
-#     output_file.write(response.content)
+# Save the file to disk
+file_name = file_url.split('/')[-1]
+with open(file_name, 'wb') as output_file:
+    output_file.write(response.content)

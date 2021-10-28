@@ -1,4 +1,5 @@
 import bs4
+from pathlib import Path
 import requests
 
 BASE_URL = 'https://www.dol.gov'
@@ -20,15 +21,21 @@ html_document = getHTMLdocument(url_to_scrape)
 # create soup object
 soup = bs4.BeautifulSoup(html_document, 'html.parser')
 
-# Get to excel
-tag_element = soup.find(title='PERM Disclosure Data FY2021')
-path = tag_element['href']
+# Find the links to the relevant excel files
+matching_tag_elements = soup.select('a[href*="LCA_Disclosure_Data"]')
 
-file_url = BASE_URL + path
-# Download file to memory
-response = requests.get(file_url)
+for tag_element in matching_tag_elements:
+    path = tag_element['href']
 
-# # Save the file to disk
-# file_name = file_url.split('/')[-1]
-# with open(file_name, 'wb') as output_file:
-#     output_file.write(response.content)
+    file_url = BASE_URL + path
+    # Download file to memory
+    response = requests.get(file_url)
+
+    # Create folder to hold the data
+    if not Path('data').is_dir():
+        pathlib.Path('data').mkdir()
+
+    # Save the data in memory to disk
+    file_name = f"data/{file_url.split('/')[-1]}"
+    with open(file_name, 'wb') as output_file:
+        output_file.write(response.content)

@@ -7,7 +7,7 @@ BASE_URL = 'https://www.dol.gov'
 
 # function to extract html document from given url
 def getHTMLdocument(url):
-    # request for HTML document of given url
+    # request for HTML document of given ur./venv/bin/python get_excel_file.pyl
     response = requests.get(url)
     # response will be provided in JSON format
     return response.text

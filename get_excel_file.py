@@ -21,8 +21,8 @@ soup = bs4.BeautifulSoup(html_document, 'html.parser')
 
 # Get to excel
 target_data_name = "LCA_Disclosure_Data_FY2021_Q3.xlsx"
-html_name = soup.find(string=target_data_name)
-tag_element = html_name.find_parent("a")
+navigable_string = soup.find(string=target_data_name)          # Find name that corresponds to a bit of text within a tag
+tag_element = navigable_string.find_parent("a")
 path = tag_element['href']
 file_url = BASE_URL + path
 

@@ -33,7 +33,7 @@ for tag_element in matching_tag_elements:
 
     # Create folder to hold the data
     if not Path('data').is_dir():
-        pathlib.Path('data').mkdir()
+        Path('data').mkdir()
 
     # Save the data in memory to disk
     file_name = f"data/{file_url.split('/')[-1]}"

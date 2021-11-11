@@ -4,3 +4,5 @@
 /LCA_Disclosure_Data_FY2021_Q3.csv
 /LCA_Disclosure_Data_FY2021_Q3.xlsx
 /test.csv
+__pycache__/
+*.~lock*

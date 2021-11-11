@@ -21,8 +21,13 @@ html_document = getHTMLdocument(url_to_scrape)
 # create soup object
 soup = bs4.BeautifulSoup(html_document, 'html.parser')
 
+# create a variable to change search query
+
+query = 'a[href*="LCA_Disclosure_Data_FY2021_Q4"]'
+# query = 'a[href*="LCA_Disclosure_Data"]'
+
 # Find the links to the relevant excel files
-matching_tag_elements = soup.select('a[href*="LCA_Disclosure_Data"]')
+matching_tag_elements = soup.select(query)
 
 for tag_element in matching_tag_elements:
     path = tag_element['href']

@@ -21,8 +21,7 @@ html_document = getHTMLdocument(url_to_scrape)
 # create soup object
 soup = bs4.BeautifulSoup(html_document, 'html.parser')
 
-# create a variable to change search query
-
+# asks the user to input year and date to filter out search query/download only one file
 print('Enter the desired year')
 year = input()
 print('Which quarter? (Q1, Q2, Q3, Q4)')
@@ -38,25 +37,19 @@ matching_tag_elements = soup.select(query)
 
 
 for tag_element in matching_tag_elements:
-    print(tag_element)
-
-    # print('\n')
 
     path = tag_element['href']
 
-    # if '2021' and 'Q4' in path:
-    print(path)
+    file_url = BASE_URL + path
+    # Download file to memory
+    response = requests.get(file_url)
 
-    # file_url = BASE_URL + path
-    # # Download file to memory
-    # response = requests.get(file_url)
+    # Create folder to hold the data
+    if not Path('data').is_dir():
+        Path('data').mkdir()
 
-    # # Create folder to hold the data
-    # if not Path('data').is_dir():
-    #     Path('data').mkdir()
-
-    # # Save the data in memory to disk
-    # file_name = f"data/{file_url.split('/')[-1]}"
-    # with open(file_name, 'wb') as output_file:
-    #     output_file.write(response.content)
+    # Save the data in memory to disk
+    file_name = f"data/{file_url.split('/')[-1]}"
+    with open(file_name, 'wb') as output_file:
+        output_file.write(response.content)
 

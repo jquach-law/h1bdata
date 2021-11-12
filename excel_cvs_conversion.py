@@ -18,7 +18,7 @@ def main():
         'PREVAILING_WAGE',
         'PW_UNIT_OF_PAY',
     ]
-    FILENAME = 'LCA_Disclosure_Data_FY2021_Q3'
+    FILENAME = 'test'
 
     # Convert excel to csv
     try:
@@ -43,7 +43,9 @@ def main():
             }
         )
         df = get_cleaned_dataframe(df)
+        print('in try')
     except ValueError:
+        print('there was an error')
         # If an error occurs because of a cell not matching the column type,
         # (such as when a cell containing a string is in a column of floats)
         # then read normally and do data cleaning to remove bad rows
@@ -60,21 +62,40 @@ def main():
 
 
 def get_cleaned_dataframe(df):
-    return df.loc[
-        (df['CASE_NUMBER'].notnull()) &
-        (df['VISA_CLASS'].notnull()) &
-        (df['JOB_TITLE'].notnull()) &
-        (df['SOC_TITLE'].notnull()) &
-        (df['FULL_TIME_POSITION'].notnull()) &
-        (df['EMPLOYER_NAME'].notnull()) &
-        (df['EMPLOYER_CITY'].notnull()) &
-        (df['EMPLOYER_STATE'].notnull()) &
-        (df['WAGE_RATE_OF_PAY_FROM'].notnull()) &
-        (df['WAGE_RATE_OF_PAY_TO'].notnull()) &
-        (df['WAGE_UNIT_OF_PAY'].notnull()) &
-        (df['PREVAILING_WAGE'].notnull())
-        # TODO: Add regex to make sure float columns don't contain strings
+    # Get rid of all the spaces
+    # TODO: Change to list comprehension
+    for i in range(len(df.columns)):
+        print(df.iloc[:, i])
+        if df.iloc[:, i].dtype == 'float64':
+            continue
+        df.iloc[:, i] = df.iloc[:, i].str.strip()
+
+    # Type casting
+    df['CASE_NUMBER'] = df['CASE_NUMBER'].astype(str)
+    df['VISA_CLASS'] = df['VISA_CLASS'].astype(str)
+    df['JOB_TITLE'] = df['JOB_TITLE'].astype(str)
+    df['SOC_TITLE'] = df['SOC_TITLE'].astype(str)
+    df['FULL_TIME_POSITION'] = df['FULL_TIME_POSITION'].astype(str)
+    df['EMPLOYER_NAME'] = df['EMPLOYER_NAME'].astype(str)
+    df['EMPLOYER_CITY'] = df['EMPLOYER_CITY'].astype(str)
+    df['EMPLOYER_STATE'] = df['EMPLOYER_STATE'].astype(str)
+    df['WAGE_RATE_OF_PAY_FROM'] = df['WAGE_RATE_OF_PAY_FROM'].astype(float)
+    df['WAGE_RATE_OF_PAY_TO'] = df['WAGE_RATE_OF_PAY_TO'].astype(float)
+    df['WAGE_UNIT_OF_PAY'] = df['WAGE_UNIT_OF_PAY'].astype(str)
+    df['PREVAILING_WAGE'] = df['PREVAILING_WAGE'].astype(float)
+    df['PW_UNIT_OF_PAY'] = df['PW_UNIT_OF_PAY'].astype(str)
+
+    # TODO: Get rid of rows if columns don't match a pattern
+    # ^[^0-9].*
+    df = df.loc[
+        (df['VISA_CLASS'].str.contains(r'^[^0-9].*', regex=True, na=False))
     ]
+    print(df)
+
+    # TODO: Add regex to make sure float columns don't contain strings
+    # TODO: Standardize casing for strings
+
+    return df
 
 
 if __name__ == '__main__':

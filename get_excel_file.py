@@ -7,7 +7,7 @@ BASE_URL = 'https://www.dol.gov'
 
 # function to extract html document from given url
 def getHTMLdocument(url):
-    # request for HTML document of given ur./venv/bin/python get_excel_file.pyl
+    # request for HTML document of given url
     response = requests.get(url)
     # response will be provided in JSON format
     return response.text
@@ -22,10 +22,15 @@ html_document = getHTMLdocument(url_to_scrape)
 soup = bs4.BeautifulSoup(html_document, 'html.parser')
 
 # asks the user to input year and date to filter out search query/download only one file
+<<<<<<< HEAD
 while year != int or False
 print('Enter the desired year: ')
 year = input()
 while quarter != 'Q1' or 'Q2' or 'Q3' or 'Q4' or False
+=======
+print('Enter the desired year: ')
+year = input()
+>>>>>>> 77d526af90585c08bf43429cffbd33e58f7b8786
 print('Which quarter? (Q1, Q2, Q3, Q4): ')
 quarter = input()
 

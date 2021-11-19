@@ -1,21 +1,6 @@
-import get_excel_file as query
+# import get_excel_file as query
 import pandas as pd
 import csv
-
-<<<<<<< HEAD
-# excel_file_name = 'LCA_Disclosure_Data_FY' + year + '_' + quarter + '.xlsx'
-# csv_file_name = 'LCA_Disclosure_Data_FY' + year + '_' + quarter + '.csv'
-
-excel_file_name = query.file_name[5:]
-csv_file_name = query.file_name[5:-4] + 'csv'
-
-# # Convert excel to csv
-# read_file = pd.read_excel (excel_file_name)
-# read_file.to_csv (csv_file_name, index = None, header=True)
-
-print(excel_file_name)
-print(csv_file_name)
-=======
 
 def main():
     COLS_TO_USE = [
@@ -57,6 +42,7 @@ def main():
                 'PW_UNIT_OF_PAY': str,
             }
         )
+        print(df)
         df = get_cleaned_dataframe(df)
         print('in try')
     except ValueError:
@@ -68,6 +54,7 @@ def main():
             f'data/{FILENAME}.xlsx',
             usecols=COLS_TO_USE,
         )
+        print(df)
         df = get_cleaned_dataframe(df)
         # TODO: Convert types after cleaning.
         #df['CASE_NUMBER'] = df['CASE_NUMBER'].astype(str)
@@ -80,7 +67,7 @@ def get_cleaned_dataframe(df):
     # Get rid of all the spaces
     # TODO: Change to list comprehension
     for i in range(len(df.columns)):
-        print(df.iloc[:, i])
+        # print(df.iloc[:, i])
         if df.iloc[:, i].dtype == 'float64':
             continue
         df.iloc[:, i] = df.iloc[:, i].str.strip()
@@ -105,7 +92,7 @@ def get_cleaned_dataframe(df):
     df = df.loc[
         (df['VISA_CLASS'].str.contains(r'^[^0-9].*', regex=True, na=False))
     ]
-    print(df)
+    # print(df)
 
     # TODO: Add regex to make sure float columns don't contain strings
     # TODO: Standardize casing for strings
@@ -115,4 +102,3 @@ def get_cleaned_dataframe(df):
 
 if __name__ == '__main__':
     main()
->>>>>>> 77d526af90585c08bf43429cffbd33e58f7b8786

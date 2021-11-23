@@ -65,11 +65,17 @@ def get_cleaned_dataframe(df):
     # Get rid of all the spaces
     # TODO: Change to list comprehension
 
-    # this doesn't work because list comprehension turns this into a list and not an object as required to mutate an entire dataframe
+    # This doesn't work because list comprehension turns this into a list and not an object as required to mutate an entire dataframe
     # df = [df.iloc[:, row].str.strip() for row in range(len(df.columns)) if df.iloc[:, row].dtype == 'object']
 
+    # Create an object out of all the columns with the dtype object
     df_object = df.select_dtypes(['object'])
+    # Modify key values
+        # Strips away leading and trailing spaces
     df[df_object.columns] = df_object.apply(lambda x: x.str.strip())
+        # Title/proper casing for all the values
+    df[df_object.columns] = df_object.apply(lambda x: x.str.title())
+
     print('after stripping')
     print(df)
 
@@ -101,6 +107,7 @@ def get_cleaned_dataframe(df):
         (df['VISA_CLASS'].str.contains(r'^[^0-9].*', regex=True, na=False))
     ]
     # df = df.loc[df['JOB_TITLE'].str.title()]
+
     print('after regex')
     print(df)
 

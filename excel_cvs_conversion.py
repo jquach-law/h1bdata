@@ -1,8 +1,8 @@
 # import get_excel_file as query
 import pandas as pd
-import csv
+# import csv
 
-def main():
+def data_cleaning():
     COLS_TO_USE = [
         'CASE_NUMBER',
         'VISA_CLASS',
@@ -42,9 +42,7 @@ def main():
                 'PW_UNIT_OF_PAY': str,
             }
         )
-        print(df)
         df = get_cleaned_dataframe(df)
-        print('in try')
     except ValueError:
         print('there was an error')
         # If an error occurs because of a cell not matching the column type,
@@ -54,7 +52,6 @@ def main():
             f'data/{FILENAME}.xlsx',
             usecols=COLS_TO_USE,
         )
-        print(df)
         df = get_cleaned_dataframe(df)
         # TODO: Convert types after cleaning.
         #df['CASE_NUMBER'] = df['CASE_NUMBER'].astype(str)
@@ -62,15 +59,23 @@ def main():
     # TODO: Export dataframe to database, we don't need to save a csv to disk
     #df.to_csv(f'{FILENAME}.csv', index=None, header=True)
 
-
 def get_cleaned_dataframe(df):
+    print('before stripping')
+    print(df)
     # Get rid of all the spaces
     # TODO: Change to list comprehension
-    for i in range(len(df.columns)):
-        # print(df.iloc[:, i])
-        if df.iloc[:, i].dtype == 'float64':
-            continue
-        df.iloc[:, i] = df.iloc[:, i].str.strip()
+    # df = [df.iloc[:, row].str.strip() for row in range(len(df.columns)) if df.iloc[:, row].dtype == 'object']
+    df_object = df.select_dtypes(['object'])
+    df[df_object.columns] = df_object.apply(lambda x: x.str.strip())
+    print('after stripping')
+    print(df)
+
+    # for i in range(len(df.columns)):
+    #     if df.iloc[:, i].dtype == 'float64':
+    #         continue
+    #     df.iloc[:, i] = df.iloc[:, i].str.strip()
+    # print('after stripping')
+    # print(df)
 
     # Type casting
     df['CASE_NUMBER'] = df['CASE_NUMBER'].astype(str)
@@ -92,7 +97,9 @@ def get_cleaned_dataframe(df):
     df = df.loc[
         (df['VISA_CLASS'].str.contains(r'^[^0-9].*', regex=True, na=False))
     ]
-    # print(df)
+    # df = df.loc[df['JOB_TITLE'].str.title()]
+    print('after regex')
+    print(df)
 
     # TODO: Add regex to make sure float columns don't contain strings
     # TODO: Standardize casing for strings
@@ -101,4 +108,4 @@ def get_cleaned_dataframe(df):
 
 
 if __name__ == '__main__':
-    main()
+    data_cleaning()

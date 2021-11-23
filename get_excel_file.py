@@ -55,3 +55,7 @@
 #     with open(file_name, 'wb') as output_file:
 #         output_file.write(response.content)
 
+import excel_cvs_conversion as clean_data
+
+clean_data.data_cleaning()
+

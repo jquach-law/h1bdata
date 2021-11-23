@@ -63,8 +63,9 @@ def get_cleaned_dataframe(df):
     print('before stripping')
     print(df)
     # Get rid of all the spaces
+    # Standardize casing for strings
+    
     # TODO: Change to list comprehension
-
     # This doesn't work because list comprehension turns this into a list and not an object as required to mutate an entire dataframe
     # df = [df.iloc[:, row].str.strip() for row in range(len(df.columns)) if df.iloc[:, row].dtype == 'object']
 
@@ -78,13 +79,6 @@ def get_cleaned_dataframe(df):
 
     print('after stripping')
     print(df)
-
-    # for i in range(len(df.columns)):
-    #     if df.iloc[:, i].dtype == 'float64':
-    #         continue
-    #     df.iloc[:, i] = df.iloc[:, i].str.strip()
-    # print('after stripping')
-    # print(df)
 
     # Type casting
     df['CASE_NUMBER'] = df['CASE_NUMBER'].astype(str)
@@ -106,13 +100,11 @@ def get_cleaned_dataframe(df):
     df = df.loc[
         (df['VISA_CLASS'].str.contains(r'^[^0-9].*', regex=True, na=False))
     ]
-    # df = df.loc[df['JOB_TITLE'].str.title()]
 
     print('after regex')
     print(df)
 
     # TODO: Add regex to make sure float columns don't contain strings
-    # TODO: Standardize casing for strings
 
     return df
 

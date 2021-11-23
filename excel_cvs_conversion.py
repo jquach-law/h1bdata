@@ -64,7 +64,10 @@ def get_cleaned_dataframe(df):
     print(df)
     # Get rid of all the spaces
     # TODO: Change to list comprehension
+
+    # this doesn't work because list comprehension turns this into a list and not an object as required to mutate an entire dataframe
     # df = [df.iloc[:, row].str.strip() for row in range(len(df.columns)) if df.iloc[:, row].dtype == 'object']
+
     df_object = df.select_dtypes(['object'])
     df[df_object.columns] = df_object.apply(lambda x: x.str.strip())
     print('after stripping')

@@ -79,7 +79,6 @@ def get_cleaned_dataframe(df):
         # Without a new object, the effect of one method replaces the other
     stripped_df_object = df.select_dtypes(['object'])
     df[stripped_df_object.columns] = stripped_df_object.apply(lambda x: x.str.title())
-    # TRY USING APPLYMAP()
 
     print('after stripping')
     print(df)

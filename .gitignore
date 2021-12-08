@@ -8,3 +8,7 @@
 /.idea/
 __pycache__/
 *.~lock*
+
+.venv
+.DS_STORE
+.DS_store

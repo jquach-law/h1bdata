@@ -4,5 +4,7 @@
 /LCA_Disclosure_Data_FY2021_Q3.csv
 /LCA_Disclosure_Data_FY2021_Q3.xlsx
 /test.csv
+/.DS_STORE
+/.idea
 __pycache__/
 *.~lock*

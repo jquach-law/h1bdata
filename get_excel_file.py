@@ -28,7 +28,8 @@ print('Which quarter? (Q1, Q2, Q3, Q4): ')
 quarter = input()
 
 # query = 'a[href*=LCA_Disclosure_Data_FY2021_Q4]'
-query = 'a[href*=LCA_Disclosure_Data_FY' + year + '_' + quarter + ']'
+# query = 'a[href*=LCA_Disclosure_Data_FY' + year + '_' + quarter + ']'
+query = f'a[href*=LCA_Disclosure_Data_FY{year}_{quarter}]'
 
 # query = 'a[href*="LCA_Disclosure_Data"]'
 
@@ -54,4 +55,5 @@ for tag_element in matching_tag_elements:
     file_name = f"data/{file_url.split('/')[-1]}"
     with open(file_name, 'wb') as output_file:
         output_file.write(response.content)
+
 

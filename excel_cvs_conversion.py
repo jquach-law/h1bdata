@@ -73,8 +73,8 @@ def get_cleaned_dataframe(df):
 
     # Converting float column with strings to turn them into NaN. Otherwise, stripping will get rid of numbers in columns with strings
     df['PREVAILING_WAGE'] = pd.to_numeric(df['PREVAILING_WAGE'], errors='coerce')
-    df['WAGE_RATE_OF_PAY_FROM'] = pd.to_numeric(df['PREVAILING_WAGE'], errors='coerce')
-    df['WAGE_RATE_OF_PAY_TO'] = pd.to_numeric(df['PREVAILING_WAGE'], errors='coerce')
+    df['WAGE_RATE_OF_PAY_FROM'] = pd.to_numeric(df['WAGE_RATE_OF_PAY_FROM'], errors='coerce')
+    df['WAGE_RATE_OF_PAY_TO'] = pd.to_numeric(df['WAGE_RATE_OF_PAY_TO'], errors='coerce')
 
     # Create an object out of all the columns with the dtype object
     df_object = df.select_dtypes(['object'])

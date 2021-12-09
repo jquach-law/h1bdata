@@ -81,12 +81,7 @@ def get_cleaned_dataframe(df):
 
     # Modify key values
         # Strips away leading and trailing spaces
-    df[df_object.columns] = df_object.apply(lambda x: x.str.strip())
-        # Title/proper casing for all the values
-            # For some reason I had to make a new object in order for it to strip AND titlecase because method chaining didn't work
-            # Without a new object, the effect of one method replaces the other
-    stripped_df_object = df.select_dtypes(['object'])
-    df[stripped_df_object.columns] = stripped_df_object.apply(lambda x: x.str.title())
+    df[df_object.columns] = df_object.apply(lambda x: x.str.strip()).apply(lambda x: x.str.title())
 
     print('after coercing strings to floats and stripping')
     print(df)

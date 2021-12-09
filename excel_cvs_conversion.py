@@ -2,29 +2,31 @@
 import pandas as pd
 # import csv
 
-def data_cleaning():
-    COLS_TO_USE = [
-        'CASE_NUMBER',
-        'VISA_CLASS',
-        'JOB_TITLE',
-        'SOC_TITLE',
-        'FULL_TIME_POSITION',
-        'EMPLOYER_NAME',
-        'EMPLOYER_CITY',
-        'EMPLOYER_STATE',
-        'WAGE_RATE_OF_PAY_FROM',
-        'WAGE_RATE_OF_PAY_TO',
-        'WAGE_UNIT_OF_PAY',
-        'PREVAILING_WAGE',
-        'PW_UNIT_OF_PAY',
-    ]
-    FILENAME = 'test'
 
+COLS_TO_USE = [
+    'CASE_NUMBER',
+    'VISA_CLASS',
+    'JOB_TITLE',
+    'SOC_TITLE',
+    'FULL_TIME_POSITION',
+    'EMPLOYER_NAME',
+    'EMPLOYER_CITY',
+    'EMPLOYER_STATE',
+    'WAGE_RATE_OF_PAY_FROM',
+    'WAGE_RATE_OF_PAY_TO',
+    'WAGE_UNIT_OF_PAY',
+    'PREVAILING_WAGE',
+    'PW_UNIT_OF_PAY',
+]
+CSV_FILENAME = 'test'
+
+
+def csv_to_df(csv_filename):
     # Convert excel to csv
     try:
         # Try reading excel file with types enforced for each column
         df = pd.read_excel(
-            f'data/{FILENAME}.xlsx',
+            f'data/{csv_filename}.xlsx',
             usecols=COLS_TO_USE,
             dtype={
                 'CASE_NUMBER': str,
@@ -50,15 +52,15 @@ def data_cleaning():
         # (such as when a cell containing a string is in a column of floats)
         # then read normally and do data cleaning to remove bad rows
         df = pd.read_excel(
-            f'data/{FILENAME}.xlsx',
+            f'data/{csv_filename}.xlsx',
             usecols=COLS_TO_USE,
         )
         df = get_cleaned_dataframe(df)
         # TODO: Convert types after cleaning.
         #df['CASE_NUMBER'] = df['CASE_NUMBER'].astype(str)
         # ...
-    # TODO: Export dataframe to database, we don't need to save a csv to disk
-    #df.to_csv(f'{FILENAME}.csv', index=None, header=True)
+    return df
+
 
 def get_cleaned_dataframe(df):
 
@@ -123,4 +125,5 @@ def get_cleaned_dataframe(df):
 
 
 if __name__ == '__main__':
-    data_cleaning()
+    # Create a dataframe from the csv file
+    df = csv_to_df(CSV_FILENAME)

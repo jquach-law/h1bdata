@@ -1,6 +1,9 @@
 # import get_excel_file as query
+from dotenv import load_dotenv
 import pandas as pd
+import sqlalchemy
 # import csv
+import os
 
 
 COLS_TO_USE = [
@@ -125,5 +128,36 @@ def get_cleaned_dataframe(df):
 
 
 if __name__ == '__main__':
+    # Get environment variables set in the .env file
+    load_dotenv()
+
     # Create a dataframe from the csv file
     df = csv_to_df(CSV_FILENAME)
+
+    # Export the dataframe to the database
+    connection_string = os.path.expandvars(
+      os.environ['CRDB_CONN_STR']
+    ).replace(
+        'postgres://', 'cockroachdb://'
+    ).replace(
+        'postgresql://', 'cockroachdb://'
+    )
+    engine = sqlalchemy.create_engine(connection_string)
+    df.to_sql('sometablenamehere', engine, if_exists='replace', index=False)
+    
+    # TODO: remove prints below later
+    # Print tables in the database
+    metadata = sqlalchemy.MetaData()
+    metadata.reflect(bind=engine)
+    print(metadata.tables)
+    
+    # Print all rows in table
+    with engine.connect() as conn:
+        result = conn.execute(
+            sqlalchemy.select([metadata.tables['sometablenamehere']])
+        )
+        for row in result:
+            print(row)
+    
+    # Print df from db table
+    print(pd.read_sql('sometablenamehere', engine))

@@ -1,29 +1,36 @@
+# import get_excel_file as query
+from dotenv import load_dotenv
 import pandas as pd
+import sqlalchemy
+# import csv
+import os
 
 
-def data_cleaning():
-    COLS_TO_USE = [
-        'CASE_NUMBER',
-        'VISA_CLASS',
-        'JOB_TITLE',
-        'SOC_TITLE',
-        'FULL_TIME_POSITION',
-        'EMPLOYER_NAME',
-        'EMPLOYER_CITY',
-        'EMPLOYER_STATE',
-        'WAGE_RATE_OF_PAY_FROM',
-        'WAGE_RATE_OF_PAY_TO',
-        'WAGE_UNIT_OF_PAY',
-        'PREVAILING_WAGE',
-        'PW_UNIT_OF_PAY',
-    ]
-    FILENAME = 'test'
+COLS_TO_USE = [
+    'CASE_NUMBER',
+    'VISA_CLASS',
+    'JOB_TITLE',
+    'SOC_TITLE',
+    'FULL_TIME_POSITION',
+    'EMPLOYER_NAME',
+    'EMPLOYER_CITY',
+    'EMPLOYER_STATE',
+    'WAGE_RATE_OF_PAY_FROM',
+    'WAGE_RATE_OF_PAY_TO',
+    'WAGE_UNIT_OF_PAY',
+    'PREVAILING_WAGE',
+    'PW_UNIT_OF_PAY',
+]
+CSV_FILENAME = 'test'
+
+
+def csv_to_df(csv_filename):
 
     # Convert excel to csv
     try:
         # Try reading excel file with types enforced for each column
         df = pd.read_excel(
-            f'data/{FILENAME}.xlsx',
+            f'data/{csv_filename}.xlsx',
             usecols=COLS_TO_USE,
             dtype={
                 'CASE_NUMBER': str,
@@ -48,29 +55,15 @@ def data_cleaning():
         # (such as when a cell containing a string is in a column of floats)
         # then read normally and do data cleaning to remove bad rows
         df = pd.read_excel(
-            f'data/{FILENAME}.xlsx',
+            f'data/{csv_filename}.xlsx',
             usecols=COLS_TO_USE,
         )
         df = get_cleaned_dataframe(df)
 
-        # Convert types after cleaning.
-        df['CASE_NUMBER'] = df['CASE_NUMBER'].astype(str)
-        df['VISA_CLASS'] = df['VISA_CLASS'].astype(str)
-        df['JOB_TITLE'] = df['JOB_TITLE'].astype(str)
-        df['SOC_TITLE'] = df['SOC_TITLE'].astype(str)
-        df['FULL_TIME_POSITION'] = df['FULL_TIME_POSITION'].astype(str)
-        df['EMPLOYER_NAME'] = df['EMPLOYER_NAME'].astype(str)
-        df['EMPLOYER_CITY'] = df['EMPLOYER_CITY'].astype(str)
-        df['EMPLOYER_STATE'] = df['EMPLOYER_STATE'].astype(str)
-        df['WAGE_RATE_OF_PAY_FROM'] = df['WAGE_RATE_OF_PAY_FROM'].astype(float)
-        df['WAGE_RATE_OF_PAY_TO'] = df['WAGE_RATE_OF_PAY_TO'].astype(float)
-        df['WAGE_UNIT_OF_PAY'] = df['WAGE_UNIT_OF_PAY'].astype(str)
-        df['PREVAILING_WAGE'] = df['PREVAILING_WAGE'].astype(float)
-        df['PW_UNIT_OF_PAY'] = df['PW_UNIT_OF_PAY'].astype(str)
-
-    # TODO: Export dataframe to database, we don't need to save a csv to disk
-    #df.to_csv(f'{FILENAME}.csv', index=None, header=True)
-
+        # TODO: Convert types after cleaning.
+        #df['CASE_NUMBER'] = df['CASE_NUMBER'].astype(str)
+        # ...
+    return df
 
 def get_cleaned_dataframe(df):
     #̶ T̶O̶D̶O̶:̶ C̶h̶a̶n̶g̶e̶ t̶o̶ l̶i̶s̶t̶ c̶o̶m̶p̶r̶e̶h̶e̶n̶s̶i̶o̶n̶
@@ -94,4 +87,37 @@ def get_cleaned_dataframe(df):
 
 
 if __name__ == '__main__':
-    data_cleaning()
+
+    # Get environment variables set in the .env file
+    load_dotenv()
+
+    # Create a dataframe from the csv file
+    df = csv_to_df(CSV_FILENAME)
+
+    # Export the dataframe to the database
+    connection_string = os.path.expandvars(
+      os.environ['CRDB_CONN_STR']
+    ).replace(
+        'postgres://', 'cockroachdb://'
+    ).replace(
+        'postgresql://', 'cockroachdb://'
+    )
+    engine = sqlalchemy.create_engine(connection_string)
+    df.to_sql('sometablenamehere', engine, if_exists='replace', index=False)
+    
+    # TODO: remove prints below later
+    # Print tables in the database
+    metadata = sqlalchemy.MetaData()
+    metadata.reflect(bind=engine)
+    print(metadata.tables)
+    
+    # Print all rows in table
+    with engine.connect() as conn:
+        result = conn.execute(
+            sqlalchemy.select([metadata.tables['sometablenamehere']])
+        )
+        for row in result:
+            print(row)
+    
+    # Print df from db table
+    print(pd.read_sql('sometablenamehere', engine))

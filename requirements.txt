@@ -1,4 +1,7 @@
 beautifulsoup4
-pandas
-requests
 openpyxl
+pandas
+python-dotenv
+requests
+sqlalchemy
+sqlalchemy-cockroachdb

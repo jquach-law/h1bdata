@@ -85,15 +85,12 @@ def get_cleaned_dataframe(df):
 
     return df
 
-
-if __name__ == '__main__':
-
-    # Get environment variables set in the .env file
-    load_dotenv()
-
-    # Create a dataframe from the csv file
-    df = csv_to_df(CSV_FILENAME)
-
+def connect_to_database():
+    """
+    Connect to cockroach database
+    Args: N/A
+    Return: Engine object, provides access to a Connection, which can then invoke SQL statements
+    """
     # Export the dataframe to the database
     connection_string = os.path.expandvars(
       os.environ['CRDB_CONN_STR']
@@ -103,7 +100,52 @@ if __name__ == '__main__':
         'postgresql://', 'cockroachdb://'
     )
     engine = sqlalchemy.create_engine(connection_string)
-    df.to_sql('sometablenamehere', engine, if_exists='replace', index=False)
+    return engine
+
+def export_dataframe_to_database(df, engine, table_name):
+    """
+    Export dataframe to database
+    Args:
+        df: pandas dataframe
+        engine: sqlalchemy engine
+        table_name: name of table to be created in database
+    Return: N/A 
+    """
+    print("Exporting dataframe to database...")
+    df.to_sql(f'{table_name}', engine, if_exists='replace', index=False)
+    print("Dataframe exported to database successfully!")
+
+# TODO: Remove the helper function later
+def create_small_dataframe():
+    """
+    Create a small dataframe for test
+    Reference: https://www.geeksforgeeks.org/applying-lambda-functions-to-pandas-dataframe/
+    TO BE REMOVED LATER
+    """
+    values= [['Rohan',455],['Elvish',250],['Deepak',495],
+            ['Soni',400],['Radhika',350],['Vansh',450]] 
+    
+    df = pd.DataFrame(values,columns=['Name','Total_Marks'])
+    df = df.assign(Percentage = lambda x: (x['Total_Marks'] /500 * 100))
+    return df
+
+if __name__ == '__main__':
+
+    # Get environment variables set in the .env file
+    load_dotenv()
+
+    # Create a dataframe from the csv file
+    # df = csv_to_df(CSV_FILENAME)
+
+    # Connect to database
+    engine = connect_to_database()
+
+    # TODO: remove create_small_dataframe function later
+    # Create a small dataframe to test
+    test_df = create_small_dataframe()
+
+    # Export the dataframe to the database
+    export_dataframe_to_database(test_df, engine, "exam_score")
     
     # TODO: remove prints below later
     # Print tables in the database
@@ -114,10 +156,15 @@ if __name__ == '__main__':
     # Print all rows in table
     with engine.connect() as conn:
         result = conn.execute(
-            sqlalchemy.select([metadata.tables['sometablenamehere']])
+            sqlalchemy.select([metadata.tables['exam_score']])
         )
         for row in result:
             print(row)
-    
+
     # Print df from db table
-    print(pd.read_sql('sometablenamehere', engine))
+    print("Printing dataframe from db table...")
+    print(pd.read_sql('exam_score', engine))
+
+    # TODO: remove below function later
+    # Clear all table stored in specified metadata
+    # metadata.drop_all(bind=engine)

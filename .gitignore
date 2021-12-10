@@ -13,3 +13,7 @@ __pycache__/
 .DS_STORE
 .DS_store
 /.env
+
+# Setup Cockroach db file
+cockroach-v21.2.2.darwin-10.9-amd64
+TestDatabase.py

@@ -100,7 +100,6 @@ def connect_to_database():
         'postgresql://', 'cockroachdb://'
     )
     engine = sqlalchemy.create_engine(connection_string)
-    print("Database connected!")
     return engine
 
 def export_dataframe_to_database(df, engine, table_name):
@@ -129,7 +128,6 @@ def create_small_dataframe():
     df = pd.DataFrame(values,columns=['Name','Total_Marks'])
     df = df.assign(Percentage = lambda x: (x['Total_Marks'] /500 * 100))
     return df
-
 
 if __name__ == '__main__':
 
@@ -166,3 +164,7 @@ if __name__ == '__main__':
     # Print df from db table
     print("Printing dataframe from db table...")
     print(pd.read_sql('exam_score', engine))
+
+    # TODO: remove below function later
+    # Clear all table stored in specified metadata
+    # metadata.drop_all(bind=engine)

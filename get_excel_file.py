@@ -34,7 +34,7 @@ class GetExcelFile:
     def _set_file_name(self, year, quarter):
         self._file_name = f'a[href*=LCA_Disclosure_Data_FY{year}_{quarter}]'
 
-    def _get_scraped_period(self, year=None, quarter=None, manual_input=False):
+    def _get_scraped_period(self, year, quarter, manual_input=False):
 
         # create document
         html_document = self._getHTMLdocument()
@@ -45,7 +45,7 @@ class GetExcelFile:
         # Handle manual input
         if manual_input:
             self._set_file_name(year, quarter)
-            return soup, self._set_file_name
+            return soup, self._file_name
         
         # Get correct quarter period
         if 1 <= datetime.now().month <= 3:
@@ -61,7 +61,7 @@ class GetExcelFile:
     def get_file(self, year=None, quarter=None, manual_input=False):
 
         self._generate_schedule()
-        
+
         soup, query = self._get_scraped_period(year, quarter, manual_input)
 
         # Find the links to the relevant excel files
@@ -89,12 +89,12 @@ class GetExcelFile:
 if __name__ == "__main__":
     get_excel_file = GetExcelFile()
 
-    # # asks the user to input year and date to filter out search query/download only one file
-    # print('Enter the desired year: ')
-    # year = input()
-    # print('Which quarter? (Q1, Q2, Q3, Q4): ')
-    # quarter = input()
+    # asks the user to input year and date to filter out search query/download only one file
+    print('Enter the desired year: ')
+    year = int(input())
+    print('Which quarter? (Q1, Q2, Q3, Q4): ')
+    quarter = input()
 
-    # get_excel_file.get_file(year, quarter, manual_input=True)
+    get_excel_file.get_file(year, quarter, manual_input=True)
 
-    get_excel_file.get_file()
+    # get_excel_file.get_file()

@@ -2,7 +2,7 @@ import bs4
 from pathlib import Path
 import requests
 from datetime import datetime
-class GetExcelFile:
+class Data:
 
     def __init__(self):
         self._base_url = 'https://www.dol.gov'
@@ -48,7 +48,7 @@ class GetExcelFile:
             return soup, self._file_name
         
         # Get correct quarter period
-        if 1 <= datetime.now().month <= 3:
+        if 1 <= datetime.now().month and datetime.now().month <= 3:
             # Get Q4 of previous year if current month is 1~3,
             # as currenet year's Q1 data may not be out.
             quarter=self._schedule[datetime.now().year - 1][datetime.now().month]
@@ -87,7 +87,7 @@ class GetExcelFile:
                 output_file.write(response.content)
 
 if __name__ == "__main__":
-    get_excel_file = GetExcelFile()
+    get_excel_file = Data()
 
     # asks the user to input year and date to filter out search query/download only one file
     print('Enter the desired year: ')
@@ -98,3 +98,6 @@ if __name__ == "__main__":
     get_excel_file.get_file(year, quarter, manual_input=True)
 
     # get_excel_file.get_file()
+
+    # Test helper function, get_scrape_period function
+    # Assign variable for current year and date

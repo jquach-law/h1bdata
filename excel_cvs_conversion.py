@@ -112,6 +112,7 @@ def create_small_dataframe():
 
 if __name__ == '__main__':
 
+    print("hello")
     # Get environment variables set in the .env file
     load_dotenv()
 

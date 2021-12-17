@@ -20,15 +20,12 @@ COLS_TO_USE = [
     'PREVAILING_WAGE',
     'PW_UNIT_OF_PAY',
 ]
-CSV_FILENAME = 'test'
+CSV_FILE_PATH = 'test'
 
 
 def csv_to_df(csv_filename):
     # Convert excel to csv
-    df = pd.read_excel(
-        f'data/{csv_filename}.xlsx',
-        usecols=COLS_TO_USE,
-    )
+    df = pd.read_excel(csv_filename, usecols=COLS_TO_USE)
     df = coerce_to_numeric_type(df)
     df = strip_and_standardize_casing(df)
     df['WAGE_RATE_OF_PAY_FROM'] = df['WAGE_RATE_OF_PAY_FROM'].astype(float)
@@ -117,7 +114,7 @@ if __name__ == '__main__':
     load_dotenv()
 
     # Create a dataframe from the csv file
-    df = csv_to_df(CSV_FILENAME)
+    df = csv_to_df(CSV_FILE_PATH)
 
     # Connect to database
     engine = connect_to_database()

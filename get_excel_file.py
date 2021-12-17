@@ -7,22 +7,7 @@ class Data:
     def __init__(self):
         self._base_url = 'https://www.dol.gov'
         self._url_to_scrape = 'https://www.dol.gov/agencies/eta/foreign-labor/performance'
-        self._schedule = {
-            datetime.now().year - 1:{},
-            datetime.now().year: {}
-        }
         self._file_name = None
-
-    def _generate_schedule(self):
-        for month in range(1, 13):
-            if 1 <= month <= 3:
-                self._schedule[datetime.now().year - 1][month] = "Q4"
-            elif 4 <= month <= 6:
-                self._schedule[datetime.now().year][month] = "Q1"
-            elif 7 <= month <= 9:
-                self._schedule[datetime.now().year][month] = "Q2"
-            else:
-                self._schedule[datetime.now().year][month] = "Q3"
    
     def _getHTMLdocument(self):
         """function to extract html document from given url"""
@@ -46,21 +31,25 @@ class Data:
         if manual_input:
             self._set_file_name(year, quarter)
             return soup, self._file_name
-        
-        # Get correct quarter period
-        if 1 <= datetime.now().month and datetime.now().month <= 3:
-            # Get Q4 of previous year if current month is 1~3,
-            # as currenet year's Q1 data may not be out.
-            quarter=self._schedule[datetime.now().year - 1][datetime.now().month]
-        else:
-            quarter=self._schedule[datetime.now().year][datetime.now().month]
 
-        self._set_file_name(datetime.now().year, quarter)
+        # Determine 'year' and 'quarter' for url
+        curr_mo = datetime.now().month
+        year = datetime.now().year
+        if 1 <= curr_mo <= 3:
+            year -= 1
+            quarter = "Q4"
+        elif 4 <= curr_mo <= 6:
+            quarter = "Q1"
+        elif 7 <= curr_mo <= 9:
+            quarter = "Q2"
+        else: #10<= current month<=12
+            quarter = "Q3"
+
+        self._set_file_name(year, quarter)
+
         return soup, self._file_name
 
     def get_file(self, year=None, quarter=None, manual_input=False):
-
-        self._generate_schedule()
 
         soup, query = self._get_scraped_period(year, quarter, manual_input)
 

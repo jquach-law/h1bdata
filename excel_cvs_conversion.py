@@ -20,7 +20,7 @@ COLS_TO_USE = [
     'PREVAILING_WAGE',
     'PW_UNIT_OF_PAY',
 ]
-CSV_FILE_PATH = 'test'
+CSV_FILE_PATH = 'data/test.xlsx'
 
 
 def csv_to_df(csv_filename):

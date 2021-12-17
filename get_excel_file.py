@@ -2,15 +2,15 @@ import bs4
 from pathlib import Path
 import requests
 from datetime import datetime
-class Data:
 
+
+class Data:
     def __init__(self):
-        self._base_url = 'https://www.dol.gov'
-        self._url_to_scrape = 'https://www.dol.gov/agencies/eta/foreign-labor/performance'
-        self._schedule = {
-            datetime.now().year - 1:{},
-            datetime.now().year: {}
-        }
+        self._base_url = "https://www.dol.gov"
+        self._url_to_scrape = (
+            "https://www.dol.gov/agencies/eta/foreign-labor/performance"
+        )
+        self._schedule = {datetime.now().year - 1: {}, datetime.now().year: {}}
         self._file_name = None
 
     def _generate_schedule(self):
@@ -23,7 +23,7 @@ class Data:
                 self._schedule[datetime.now().year][month] = "Q2"
             else:
                 self._schedule[datetime.now().year][month] = "Q3"
-   
+
     def _getHTMLdocument(self):
         """function to extract html document from given url"""
         # request for HTML document of given url
@@ -32,7 +32,7 @@ class Data:
         return response.text
 
     def _set_file_name(self, year, quarter):
-        self._file_name = f'a[href*=LCA_Disclosure_Data_FY{year}_{quarter}]'
+        self._file_name = f"a[href*=LCA_Disclosure_Data_FY{year}_{quarter}]"
 
     def _get_scraped_period(self, year, quarter, manual_input=False):
 
@@ -40,20 +40,20 @@ class Data:
         html_document = self._getHTMLdocument()
 
         # create soup object
-        soup = bs4.BeautifulSoup(html_document, 'html.parser')
-        
+        soup = bs4.BeautifulSoup(html_document, "html.parser")
+
         # Handle manual input
         if manual_input:
             self._set_file_name(year, quarter)
             return soup, self._file_name
-        
+
         # Get correct quarter period
         if 1 <= datetime.now().month and datetime.now().month <= 3:
             # Get Q4 of previous year if current month is 1~3,
             # as currenet year's Q1 data may not be out.
-            quarter=self._schedule[datetime.now().year - 1][datetime.now().month]
+            quarter = self._schedule[datetime.now().year - 1][datetime.now().month]
         else:
-            quarter=self._schedule[datetime.now().year][datetime.now().month]
+            quarter = self._schedule[datetime.now().year][datetime.now().month]
 
         self._set_file_name(datetime.now().year, quarter)
         return soup, self._file_name
@@ -70,7 +70,7 @@ class Data:
         for tag_element in matching_tag_elements:
 
             # tag_element is the entire class a tag that contains the href so this will extract the value of href
-            path = tag_element['href']
+            path = tag_element["href"]
 
             # href value is the  subdirectory so it's combined with the main website URL
             file_url = self._base_url + path
@@ -78,21 +78,22 @@ class Data:
             response = requests.get(file_url)
 
             # Create folder to hold the data
-            if not Path('data').is_dir():
-                Path('data').mkdir()
+            if not Path("data").is_dir():
+                Path("data").mkdir()
 
             # Save the data in memory to disk
             file_name = f"data/{file_url.split('/')[-1]}"
-            with open(file_name, 'wb') as output_file:
+            with open(file_name, "wb") as output_file:
                 output_file.write(response.content)
+
 
 if __name__ == "__main__":
     get_excel_file = Data()
 
     # asks the user to input year and date to filter out search query/download only one file
-    print('Enter the desired year: ')
+    print("Enter the desired year: ")
     year = int(input())
-    print('Which quarter? (Q1, Q2, Q3, Q4): ')
+    print("Which quarter? (Q1, Q2, Q3, Q4): ")
     quarter = input()
 
     get_excel_file.get_file(year, quarter, manual_input=True)

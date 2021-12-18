@@ -19,22 +19,12 @@ class Data:
     def _set_file_name(self, year, quarter):
         self._file_name = f'a[href*=LCA_Disclosure_Data_FY{year}_{quarter}]'
 
-    def _get_scraped_period(self, year, quarter, manual_input=False):
-
-        # create document
-        html_document = self._getHTMLdocument()
-
-        # create soup object
-        soup = bs4.BeautifulSoup(html_document, 'html.parser')
-        
-        # Handle manual input
-        if manual_input:
-            self._set_file_name(year, quarter)
-            return soup, self._file_name
-
+    def _check_calendar(self, curr_mo=None, year=None):
         # Determine 'year' and 'quarter' for url
-        curr_mo = datetime.now().month
-        year = datetime.now().year
+        if curr_mo is None and year is None:
+            curr_mo = datetime.now().month
+            year = datetime.now().year
+
         if 1 <= curr_mo <= 3:
             year -= 1
             quarter = "Q4"
@@ -45,13 +35,29 @@ class Data:
         else: #10<= current month<=12
             quarter = "Q3"
 
-        self._set_file_name(year, quarter)
+        return year, quarter
 
-        return soup, self._file_name
+    def _init_soup(self):
+        # create document
+        html_document = self._getHTMLdocument()
+        # create soup object
+        soup = bs4.BeautifulSoup(html_document, 'html.parser')
+
+        return soup
+
+    def _init_query(self, year, quarter, manual_input=False):
+        # Handle manual input
+        if manual_input:
+            self._set_file_name(year, quarter)
+        else:
+            # Sets url with correct year & quarter
+            self._set_file_name(self._check_calendar())
+
+        return self._file_name
 
     def get_file(self, year=None, quarter=None, manual_input=False):
-
-        soup, query = self._get_scraped_period(year, quarter, manual_input)
+        soup = self._init_soup()
+        query = self._init_query(year, quarter, manual_input)
 
         # Find the links to the relevant excel files
         matching_tag_elements = soup.select(query)

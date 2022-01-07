@@ -51,17 +51,21 @@ class Data:
             self._set_file_name(year, quarter)
         else:
             # Sets url with correct year & quarter
-            self._set_file_name(self._check_calendar())
+            year, quarter = self._check_calendar()
+            self._set_file_name(year, quarter)
 
         return self._file_name
 
-    def get_file(self, year=None, quarter=None, manual_input=False):
+    def _get_tag_elements(self, year=None, quarter=None, manual_input=False):
         soup = self._init_soup()
         query = self._init_query(year, quarter, manual_input)
 
         # Find the links to the relevant excel files
         matching_tag_elements = soup.select(query)
 
+        return matching_tag_elements
+
+    def something(self):
         for tag_element in matching_tag_elements:
 
             # tag_element is the entire class a tag that contains the href so this will extract the value of href

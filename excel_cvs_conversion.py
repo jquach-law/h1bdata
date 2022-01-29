@@ -21,6 +21,7 @@ COLS_TO_USE = [
     "PREVAILING_WAGE",
     "PW_UNIT_OF_PAY",
 ]
+
 tmp = Data()
 year, quarter = tmp._check_calendar()
 CSV_FILE_PATH = f"data/LCA_Disclosure_Data_FY{year}_{quarter}.xlsx"

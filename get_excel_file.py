@@ -65,7 +65,10 @@ class Data:
 
         return matching_tag_elements
 
-    def something(self):
+    def download_file(self, year=None, quarter=None, manual_input=False):
+        
+        matching_tag_elements = self._get_tag_elements(year, quarter, manual_input)
+
         for tag_element in matching_tag_elements:
 
             # tag_element is the entire class a tag that contains the href so this will extract the value of href
@@ -88,15 +91,18 @@ class Data:
 if __name__ == "__main__":
     get_excel_file = Data()
 
+    ## MANUAL INPUT TESTING ##
     # asks the user to input year and date to filter out search query/download only one file
-    print('Enter the desired year: ')
-    year = int(input())
-    print('Which quarter? (Q1, Q2, Q3, Q4): ')
-    quarter = input()
+    # print('Enter the desired year: ')
+    # year = int(input())
+    # print('Which quarter? (Q1, Q2, Q3, Q4): ')
+    # quarter = input()
+    # get_excel_file.download_file(year, quarter, manual_input=True)
 
-    get_excel_file.get_file(year, quarter, manual_input=True)
+    ## AUTO INPUT: LATEST QUARTER ##
+    # download latest quarter
+    get_excel_file.download_file()
 
-    # get_excel_file.get_file()
 
     # Test helper function, get_scrape_period function
     # Assign variable for current year and date

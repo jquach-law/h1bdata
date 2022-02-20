@@ -18,3 +18,11 @@ __pycache__/
 /env/
 
 root.crt
+
+Dockerfile
+README.md
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+.pytest_cache

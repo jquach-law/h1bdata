@@ -7,7 +7,7 @@ import pytest
 
 @pytest.fixture
 def dummy_df():
-    return csv_to_df("tests/dummy_data/test_excel_cvs_conversion.xlsx")
+    return excel_to_df("tests/dummy_data/test_excel_cvs_conversion.xlsx")
 
 
 class TestCsvToDf:

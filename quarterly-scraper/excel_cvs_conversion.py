@@ -24,10 +24,10 @@ COLS_TO_USE = [
 
 tmp = Data()
 year, quarter = tmp._check_calendar()
-CSV_FILE_PATH = f"data/LCA_Disclosure_Data_FY{year}_{quarter}.xlsx"
+EXCEL_FILE_PATH = f"data/LCA_Disclosure_Data_FY{year}_{quarter}.xlsx"
 
 
-def csv_to_df(csv_filename):
+def excel_to_df(csv_filename):
     # Convert excel to csv
     df = pd.read_excel(csv_filename, usecols=COLS_TO_USE)
     df = coerce_to_numeric_type(df)
@@ -101,11 +101,11 @@ def export_dataframe_to_database(df, engine, table_name):
 
 
 if __name__ == "__main__":
-    # Get environment variables set in the .env file
+    # Load environment variables set in the .env file
     load_dotenv()
 
     # Create a dataframe from the csv file
-    df = csv_to_df(CSV_FILE_PATH)
+    df = excel_to_df(EXCEL_FILE_PATH)
 
     # Connect to database
     engine = connect_to_database()

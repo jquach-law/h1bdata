@@ -1,4 +1,4 @@
-from excel_cvs_conversion import csv_to_df
+from excel_cvs_conversion import excel_to_df
 import csv
 import numpy as np
 import pandas as pd

@@ -1,25 +1,21 @@
 /.vscode/
-/venv/
-/data/
-/LCA_Disclosure_Data_FY2021_Q3.csv
-/LCA_Disclosure_Data_FY2021_Q3.xlsx
-/test.csv
-/.DS_STORE
+venv/
+data/
 /.idea/
 __pycache__/
 *.~lock*
 
-.venv
 .DS_STORE
 .DS_store
 .env
 
 /note_self.txt
-/env/
+env/
 
 root.crt
 
 *.pyc
 *.pyo
 *.pyd
-__pycache__
+
+.pytest_cache/

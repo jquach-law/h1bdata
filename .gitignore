@@ -12,9 +12,14 @@ __pycache__/
 .venv
 .DS_STORE
 .DS_store
-/.env
+.env
 
 /note_self.txt
 /env/
 
 root.crt
+
+*.pyc
+*.pyo
+*.pyd
+__pycache__

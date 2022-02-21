@@ -10,7 +10,7 @@ load_dotenv()
 
 @app.route("/")
 def data():
-    conn = psycopg2.connect(os.environ["CRDB_CONN_STR"])
+    conn = psycopg2.connect(os.path.expandvars(os.environ["CRDB_CONN_STR"]))
     with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         cur.execute("SELECT * FROM h1bdata_table")
         rows = cur.fetchall()

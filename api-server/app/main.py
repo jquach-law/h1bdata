@@ -1,11 +1,14 @@
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import psycopg2
 import psycopg2.extras
 from psycopg2 import sql
 import os
 
 app = Flask(__name__)
+CORS(app)
+
 if "CRDB_CONN_STR" not in os.environ:
     load_dotenv()
 

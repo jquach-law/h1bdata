@@ -5,7 +5,6 @@ import { selectSearchResults } from "../state/slices/searchSlice";
 
 export default function Results() {
   const searchResults = useSelector(selectSearchResults);
-  console.log(searchResults);
 
   return (
     <>
@@ -15,6 +14,25 @@ export default function Results() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
       </Layout>
+
+      <table>
+        <thead>
+          {Object.keys(searchResults[0]).map((colName) => (
+            <th>{colName}</th>
+          ))}
+        </thead>
+        <tbody>
+          {searchResults.map((row) => {
+            return (
+              <tr>
+                {Object.keys(searchResults[0]).map((colName) => (
+                  <td>{row[colName]}</td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </>
   );
 }

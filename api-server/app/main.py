@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 import psycopg2
 import psycopg2.extras
+from psycopg2 import sql
 import os
 
 app = Flask(__name__)
@@ -24,35 +25,25 @@ def search():
     job_title = request.args.get("job_title")
     city = request.args.get("city")
 
+    employer = employer if employer else ""
+    job_title = job_title if job_title else ""
+    city = city if city else ""
+
     conn = psycopg2.connect(os.path.expandvars(os.environ["CRDB_CONN_STR"]))
     with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        # TODO: Look up ways to sanitize query / prevent SQL injection attacks.
-        query = f"""
-            SELECT *
-            FROM h1bdata_table
-        """
-        # TODO: Refactor to make it cleaner.
-        if employer or job_title or city:
-            is_first_where_condition = True
-            query += """
-            WHERE
+        query = sql.SQL(
             """
-            if employer:
-                query += f"""
-            {"AND " if not is_first_where_condition else ""}"EMPLOYER_NAME" LIKE '%{employer if employer else ""}%'
-                """
-                is_first_where_condition = False
-            if job_title:
-                query += f"""
-            {"AND " if not is_first_where_condition else ""}"JOB_TITLE" LIKE '%{job_title if job_title else ""}%'
-                """
-                is_first_where_condition = False
-            if city:
-                query += f"""
-            {"AND " if not is_first_where_condition else ""}"EMPLOYER_CITY" LIKE '%{city if city else ""}%'
-                """
-                is_first_where_condition = False
-
+                SELECT *
+                FROM h1bdata_table
+                WHERE "EMPLOYER_NAME" LIKE {}
+                    AND "JOB_TITLE" LIKE {}
+                    AND "EMPLOYER_CITY" LIKE {};
+            """
+        ).format(
+            sql.Literal(f"%{employer}%"),
+            sql.Literal(f"%{job_title}%"),
+            sql.Literal(f"%{city}%"),
+        )
         cur.execute(query)
         rows = cur.fetchall()
         conn.commit()

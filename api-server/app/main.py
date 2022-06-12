@@ -6,7 +6,8 @@ from psycopg2 import sql
 import os
 
 app = Flask(__name__)
-load_dotenv()
+if "CRDB_CONN_STR" not in os.environ:
+    load_dotenv()
 
 
 @app.route("/")

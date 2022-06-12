@@ -1,0 +1,9 @@
+.vscode/
+/.terraform/
+__pycache__/
+/venv/
+/.terraform.lock.hcl
+/terraform.tfvars
+/*terraform.tfstate*
+.env
+/root.crt

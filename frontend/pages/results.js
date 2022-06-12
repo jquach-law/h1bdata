@@ -1,8 +1,12 @@
 import Head from "next/head";
-import Link from "next/link";
+import { useSelector } from "react-redux";
 import Layout from "../components/layout";
+import { selectSearchResults } from "../state/slices/searchSlice";
 
 export default function Results() {
+  const searchResults = useSelector(selectSearchResults);
+  console.log(searchResults);
+
   return (
     <>
       <Layout>

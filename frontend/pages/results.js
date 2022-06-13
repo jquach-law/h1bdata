@@ -17,9 +17,8 @@ export default function Results() {
 
       <table>
         <thead>
-          {Object.keys(searchResults[0]).map((colName) => (
-            <th>{colName}</th>
-          ))}
+          {searchResults.length > 0 &&
+            Object.keys(searchResults[0]).map((colName) => <th>{colName}</th>)}
         </thead>
         <tbody>
           {searchResults.map((row) => {

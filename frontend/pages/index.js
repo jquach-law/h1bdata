@@ -40,7 +40,12 @@ export default function Home() {
         <div className="flex">
           <h1>H1B Data Salary Search</h1>
           <div>
-            <form>
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                refetchSearchResults().then(() => router.push("/results"));
+              }}
+            >
               <fieldset className="flex three">
                 <label>
                   <input
@@ -64,14 +69,7 @@ export default function Home() {
                   />
                 </label>
               </fieldset>
-              <button
-                type="button"
-                onClick={() =>
-                  refetchSearchResults().then(() => router.push("/results"))
-                }
-              >
-                Search
-              </button>
+              <button type="submit">Search</button>
             </form>
           </div>
           {/* TODO: Get available years from the database? */}

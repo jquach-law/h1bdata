@@ -2,38 +2,35 @@ import Head from "next/head";
 import styles from "./layout.module.css";
 import Link from "next/link";
 
-export const siteTitle = "Next.js Sample Website";
+export const siteTitle = "H1B Salary Data";
 
 export default function Layout({ children, home }) {
   return (
     <>
       <nav>
-        <a href="#" className="brand">
-          <span>H1B Data</span>
-        </a>
+        <Link href="/">
+          <a className="brand">H1B Data</a>
+        </Link>
 
         <input id="bmenub" type="checkbox" className="show" />
         <label htmlFor="bmenub" className="burger pseudo button">
           menu
         </label>
 
-        <div className="menu">
+        {/* <div className="menu">
           <a href="#" className="pseudo button icon-picture">
             Demo
           </a>
           <a href="#" className="button icon-puzzle">
             Plugins
           </a>
-        </div>
+        </div> */}
       </nav>
 
       <div className={styles.container}>
         <Head>
           <link rel="icon" href="/favicon.ico" />
-          <meta
-            name="description"
-            content="Learn how to build a personal website using Next.js"
-          />
+          <meta name="description" content="Find historical pay for jobs." />
           <meta
             property="og:image"
             content={`https://og-image.vercel.app/${encodeURI(

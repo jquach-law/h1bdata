@@ -1,24 +1,21 @@
 import axios from "axios";
 import Head from "next/head";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useDispatch } from "react-redux";
 import Layout, { siteTitle } from "../components/layout";
-import { saveSearch } from "../state/slices/searchSlice";
+import { SAVE_SEARCH } from "../state/slices/searchSlice";
 import utilStyles from "../styles/utils.module.css";
 
 export default function Home() {
+  const router = useRouter();
   const [employer, setEmployer] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [employerCity, setEmployerCity] = useState("");
+  const dispatch = useDispatch();
 
-  const {
-    isLoading,
-    error,
-    data,
-    refetch: refetchSearchResults,
-  } = useQuery(
+  const { refetch: refetchSearchResults } = useQuery(
     ["searchResults", employer, jobTitle, employerCity],
     () =>
       axios
@@ -29,17 +26,9 @@ export default function Home() {
     {
       refetchOnWindowFocus: false,
       enabled: false,
+      onSuccess: (data) => dispatch(SAVE_SEARCH(data)),
     }
   );
-  const dispatch = useDispatch();
-
-  if (data) {
-    dispatch(saveSearch(data));
-  }
-
-  useEffect(() => {
-    console.log(employer, jobTitle, employerCity);
-  }, []);
 
   return (
     <Layout home>
@@ -75,11 +64,14 @@ export default function Home() {
                   />
                 </label>
               </fieldset>
-              <Link href="/results">
-                <button type="button" onClick={() => refetchSearchResults()}>
-                  Search
-                </button>
-              </Link>
+              <button
+                type="button"
+                onClick={() =>
+                  refetchSearchResults().then(() => router.push("/results"))
+                }
+              >
+                Search
+              </button>
             </form>
           </div>
           {/* TODO: Get available years from the database? */}

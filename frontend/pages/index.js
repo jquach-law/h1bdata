@@ -1,10 +1,9 @@
 import axios from "axios";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useDispatch } from "react-redux";
-import Layout, { siteTitle } from "../components/layout";
+import Layout from "../components/layout";
 import { SAVE_SEARCH } from "../state/slices/searchSlice";
 import utilStyles from "../styles/utils.module.css";
 
@@ -32,13 +31,9 @@ export default function Home() {
 
   return (
     <Layout home>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-
-      <section className={utilStyles.headingMd}>
+      <section className={utilStyles.indexMaxWidth}>
         <div className="flex">
-          <h1>H1B Data Salary Search</h1>
+          <h1 className="title">H1B Data Salary Search</h1>
           <div>
             <form
               onSubmit={(event) => {
@@ -47,29 +42,39 @@ export default function Home() {
               }}
             >
               <fieldset className="flex three">
-                <label>
+                <div className="field">
+                  <label className="label">Employer</label>
                   <input
+                    className="input"
                     type="text"
                     placeholder="Employer"
                     onChange={(event) => setEmployer(event.target.value)}
                   />
-                </label>
-                <label>
+                </div>
+                <div className="field">
+                  <label className="label">Job</label>
                   <input
+                    className="input"
                     type="text"
-                    placeholder="Job Title"
+                    placeholder="Job"
                     onChange={(event) => setJobTitle(event.target.value)}
                   />
-                </label>
-                <label>
+                </div>
+                <div className="field">
+                  <label className="label">City</label>
                   <input
+                    className="input"
                     type="text"
                     placeholder="City"
                     onChange={(event) => setEmployerCity(event.target.value)}
                   />
-                </label>
+                </div>
+                <div className="field">
+                  <button className="button" type="submit">
+                    Search
+                  </button>
+                </div>
               </fieldset>
-              <button type="submit">Search</button>
             </form>
           </div>
           {/* TODO: Get available years from the database? */}

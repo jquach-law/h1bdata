@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Provider } from "react-redux";
-import "../styles/global.css";
+import "../styles/bulma.min.css";
 import store from "../state/store";
 
 const queryClient = new QueryClient();

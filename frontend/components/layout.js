@@ -1,35 +1,34 @@
 import Head from "next/head";
 import styles from "./layout.module.css";
-import Link from "next/link";
+import Navbar from "./navbar";
 
 export const siteTitle = "H1B Salary Data";
 
 export default function Layout({ children, home }) {
   return (
     <>
-      <nav>
-        <Link href="/">
-          <a className="brand">H1B Data</a>
-        </Link>
-
-        <input id="bmenub" type="checkbox" className="show" />
-        <label htmlFor="bmenub" className="burger pseudo button">
-          menu
-        </label>
-
-        {/* <div className="menu">
-          <a href="#" className="pseudo button icon-picture">
-            Demo
-          </a>
-          <a href="#" className="button icon-puzzle">
-            Plugins
-          </a>
-        </div> */}
-      </nav>
+      <Navbar />
 
       <div className={styles.container}>
         <Head>
           <link rel="icon" href="/favicon.ico" />
+          <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+          />
           <meta name="description" content="Find historical pay for jobs." />
           <meta
             property="og:image"
@@ -39,6 +38,7 @@ export default function Layout({ children, home }) {
           />
           <meta name="og:title" content={siteTitle} />
           <meta name="twitter:card" content="summary_large_image" />
+          <title>{siteTitle}</title>
         </Head>
         <main>{children}</main>
       </div>
